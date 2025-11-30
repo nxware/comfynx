@@ -2,4 +2,4 @@
 
 ## Nodes
 
-[](docs/nodes_watermark.png)
+![](docs/nodes_watermark.png)
