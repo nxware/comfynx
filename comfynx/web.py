@@ -1,4 +1,18 @@
 
+from server import PromptServer
+from aiohttp import web
+
+import os
+
+routes = PromptServer.instance.routes
+
+@routes.get('/nx/p')
+async def my_function(request):
+    #the_data = await request.post()
+    # the_data now holds a dictionary of the values sent
+    text = "Test result: " + os.getcwd()
+    return web.Response(text=text)
+
 
 def setup_routes():
     try:
