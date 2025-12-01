@@ -14,6 +14,14 @@ async def my_function(request):
     return web.Response(text=text)
 
 
+@routes.post('/nx/btn')
+async def my_function(request):
+    #the_data = await request.post()
+    # the_data now holds a dictionary of the values sent
+    
+    return web.json_response({"status": "ok"})
+
+
 def setup_routes():
     try:
         from aiohttp import web
