@@ -364,7 +364,9 @@ class LoadImageEx:
 
     @classmethod
     def IS_CHANGED(s, image):
-        image_path = folder_paths.get_annotated_filepath(image)
+        import folder_paths
+        import hashlib
+        image_path = folder_paths.get_annotated_filepath(image
         m = hashlib.sha256()
         with open(image_path, 'rb') as f:
             m.update(f.read())
@@ -372,6 +374,7 @@ class LoadImageEx:
 
     @classmethod
     def VALIDATE_INPUTS(s, image):
+        import folder_paths
         if not folder_paths.exists_annotated_filepath(image):
             return "Invalid image file: {}".format(image)
 
@@ -394,4 +397,5 @@ NODE_CLASS_MAPPINGS = {
     "StringMultilineC": StringMultilineC,
     "Translate": Translate,
     "LoadImageEx": LoadImageEx
+
 }
