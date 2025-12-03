@@ -366,7 +366,7 @@ class LoadImageEx:
     def IS_CHANGED(s, image):
         import folder_paths
         import hashlib
-        image_path = folder_paths.get_annotated_filepath(image
+        image_path = folder_paths.get_annotated_filepath(image)
         m = hashlib.sha256()
         with open(image_path, 'rb') as f:
             m.update(f.read())
@@ -399,3 +399,4 @@ NODE_CLASS_MAPPINGS = {
     "LoadImageEx": LoadImageEx
 
 }
+
