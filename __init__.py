@@ -386,6 +386,8 @@ class LoadImageEx:
 from .comfynx import web
 #    #web.setup_routes()
 
+from .comfynx.nweb import NWebUpload
+
 WEB_DIRECTORY = './web'
 
 NODE_CLASS_MAPPINGS = {
@@ -396,7 +398,7 @@ NODE_CLASS_MAPPINGS = {
     "FileLinePicker": FileLinePicker,
     "StringMultilineC": StringMultilineC,
     "Translate": Translate,
-    "LoadImageEx": LoadImageEx
-
+    "LoadImageEx": LoadImageEx,
+    "NWebUpload": NWebUpload
 }
 

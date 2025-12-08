@@ -10,7 +10,7 @@ routes = PromptServer.instance.routes
 async def my_function(request):
     #the_data = await request.post()
     # the_data now holds a dictionary of the values sent
-    text = "Test result: " + os.getcwd()
+    text = "Test result: " + os.getcwd() #  L:\ComfyUI_windows_portable
     return web.Response(text=text)
 
 
