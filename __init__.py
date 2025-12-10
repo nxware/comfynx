@@ -386,7 +386,7 @@ class LoadImageEx:
 from .comfynx import web
 #    #web.setup_routes()
 
-from .comfynx.nweb import NWebUpload
+from .comfynx.llm import LlmPromptRewrite
 
 WEB_DIRECTORY = './web'
 
@@ -399,6 +399,12 @@ NODE_CLASS_MAPPINGS = {
     "StringMultilineC": StringMultilineC,
     "Translate": Translate,
     "LoadImageEx": LoadImageEx,
-    "NWebUpload": NWebUpload
+    "LlmPromptRewrite": LlmPromptRewrite
 }
+
+try:
+    from .comfynx.nweb import NWebUpload
+    NODE_CLASS_MAPPINGS["NWebUpload"] = NWebUpload
+except Exception:
+    print("No NWeb")
 
