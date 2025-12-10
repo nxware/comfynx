@@ -1,6 +1,40 @@
 
 
 class LlmPromptRewrite:
+    """
+    Dieser ComfyUI-Node `LlmPromptRewrite` dient zur modellgestützten Umformulierung von Texteingaben über die
+    OpenAI Chat Completions API. Die Node akzeptiert einen Prompt sowie
+    einen Anweisungstext, der den Platzhalter "{prompt}" enthält. Der Platzhalter wird zur
+    Laufzeit durch den tatsächlichen Prompt ersetzt und anschließend an das ausgewählte
+    OpenAI-Modell gesendet. Die vom Modell gelieferte Neufassung wird als String an den
+    ComfyUI-Datenfluss zurückgegeben.
+
+    Inputs
+    ------
+    prompt : STRING
+        Der ursprüngliche, zu überarbeitende Text.
+
+    rewrite_instruction : STRING
+        Eine Anweisung zur Umformulierung, die den Platzhalter "{prompt}" enthalten kann.
+        Dieser wird vor dem API-Aufruf automatisch ersetzt.
+
+    openai_api_key : STRING
+        API-Schlüssel für die Authentifizierung beim OpenAI-Endpunkt.
+
+    model : STRING
+        Name des zu verwendenden Chat-Modells (z. B. "gpt-4.1-mini").
+
+    Output
+    ------
+    STRING
+        Die vom Modell generierte, überarbeitete Variante des Prompts.
+
+    Einsatzgebiet
+    -------------
+    Der Node eignet sich für automatische Textoptimierung, Vereinheitlichung von Schreibstilen,
+    Prompt-Engineering-Pipelines sowie alle Workflows, die eine dynamische Umformulierung
+    von Benutzereingaben innerhalb von ComfyUI benötigen.
+    """
     @classmethod
     def INPUT_TYPES(cls):
         return {
