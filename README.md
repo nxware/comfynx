@@ -13,6 +13,8 @@ replaced at runtime with the actual prompt and then sent to the selected OpenAI
 model. The model’s rewritten output is returned as a string to the ComfyUI
 dataflow.
 
+![](docs/llm_prompt_rewrite.png)
+
 Inputs
 ------
 prompt : STRING
@@ -39,5 +41,5 @@ This node is suitable for automatic text refinement, unifying writing style,
 prompt-engineering pipelines, and any workflows requiring dynamic rewriting
 of user input within ComfyUI.
 
-![](docs/llm_prompt_rewrite.png)
+Example for LM Studio: 
 ![](docs/lmstudio.png)

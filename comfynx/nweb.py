@@ -72,3 +72,40 @@ class NWebUpload:
             counter += 1
 
         return { "ui": { "images": results } }
+    
+
+class NWebDocMetaUpdate:
+    def __init__(self):
+        self.ns = 'ai'    
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "nweb_name": ("STRING", {"default": "default"}),
+                "ns": ("STRING", {"default": "ai"}),
+                "name": ("STRING", {"default": "suggested_tags"}),
+                "doc": ("STRING", {"default": "1234"}),
+                "value": ("STRING", {"default": "1234"}),
+            }
+        }
+    
+    RETURN_TYPES = ()
+    FUNCTION = "update_doc"
+
+    OUTPUT_NODE = True
+
+    CATEGORY = "image"
+    DESCRIPTION = "Saves the input images to your ComfyUI output directory."
+
+    def update_doc(self, nweb_name, ns, name, doc, value):
+        nc = NWebClient(nweb_name)
+        d = nc.doc(doc)
+        d.setMetaValue(ns, name, value)
+        return {}
+    
+
+NODE_CLASS_MAPPINGS = {
+  "NWebUpload": NWebUpload,
+  "NWebDocMetaUpdate": NWebDocMetaUpdate,
+}

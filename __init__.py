@@ -403,8 +403,8 @@ NODE_CLASS_MAPPINGS = {
 }
 
 try:
-    from .comfynx.nweb import NWebUpload
-    NODE_CLASS_MAPPINGS["NWebUpload"] = NWebUpload
+    from .comfynx import nweb
+    NODE_CLASS_MAPPINGS = {**NODE_CLASS_MAPPINGS, **nweb.NODE_CLASS_MAPPINGS}
 except Exception:
     print("No NWeb")
 
