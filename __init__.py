@@ -408,3 +408,9 @@ try:
 except Exception:
     print("No NWeb")
 
+
+try:
+    from .comfynx import video
+    NODE_CLASS_MAPPINGS = {**NODE_CLASS_MAPPINGS, **video.NODE_CLASS_MAPPINGS}
+except Exception:
+    print("No Video")
