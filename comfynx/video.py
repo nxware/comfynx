@@ -135,14 +135,38 @@ class ImageToBatch:
         return (batch,)
 
 
+class LastImageFromBatch:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "image_batch": ("IMAGE",),
+            }
+        }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "get_last"
+    CATEGORY = "image/batch"
+
+    def get_last(self, image_batch):
+        # image_batch: [B, H, W, C]
+        if image_batch.shape[0] < 1:
+            raise ValueError("Batch ist leer")
+
+        last_image = image_batch[-1:]  # behält die Batch-Dimension [1, H, W, C]
+        return (last_image,)
+
+
 NODE_CLASS_MAPPINGS = {
     "AnimateImageSlidingCrop": AnimateImageSlidingCrop,
     "ConcatImageBatches": ConcatImageBatches,
-      "ImageToBatch": ImageToBatch
+    "ImageToBatch": ImageToBatch,
+    "LastImageFromBatch": LastImageFromBatch
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "AnimateImageSlidingCrop": "Animate Image Sliding Crop",
     "ConcatImageBatches": "Concat Image Batches",
-    "ImageToBatch": "Image to Batch"
+    "ImageToBatch": "Image to Batch",
+    "LastImageFromBatch": "Last Image from Batch"
 }
