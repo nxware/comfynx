@@ -98,6 +98,7 @@ class AddWatermark:
         return result
     
     def image_to_bytesio(
+        self,
         img: Image.Image,
         format: str = "PNG",
         **save_kwargs,
