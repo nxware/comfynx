@@ -97,19 +97,30 @@ class AddWatermark:
         result.alpha_composite(watermark, position)
         return result
     
-    def image_to_bytesio(self, img: Image.Image, format: str = "PNG") -> io.BytesIO:
+    def image_to_bytesio(
+        img: Image.Image,
+        format: str = "PNG",
+        **save_kwargs,
+    ) -> io.BytesIO:
         """
         Serialize a PIL Image into a BytesIO buffer.
 
         :param img: PIL Image instance
-        :param format: Output format (default: PNG)
+        :param format: Output format (e.g., "PNG", "JPEG")
+        :param save_kwargs: Additional Pillow save() parameters
         :return: BytesIO positioned at start
         """
         if not isinstance(img, Image.Image):
             raise TypeError("img must be a PIL.Image.Image instance")
+        format = format.upper()
+        if format == "JPG":
+            format = "JPEG"
+        output_img = img
+        if format == "JPEG":
+            output_img = img.convert("RGB")
         buffer = io.BytesIO()
-        img.save(buffer, format=format)
-        buffer.seek(0)  # Reset cursor for reading
+        output_img.save(buffer, format=format, **save_kwargs)
+        buffer.seek(0)
         return buffer
 
     def tensor_to_pil(self, tensor_image):
