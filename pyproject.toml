@@ -1,0 +1,23 @@
+[project]
+name = "comfynx"
+description = ""
+version = "1.0.0"
+
+[project.urls]
+Repository = "https://github.com/nxware/comfynx"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[tool.hatch.build]
+include = [ "comfynx/*.py" ]
+
+[project.entry-points.nweb_runner]
+promptdb = "comfynx.promptdb:PromptDB"
+
+
+[tool.comfy]
+#PublisherId = ""
+DisplayName = "comfynx"
+Icon = ""
