@@ -33,6 +33,7 @@ class AddWatermark:
         self, 
         text: str,
         color: Tuple[int, int, int] | Tuple[int, int, int, int] = (255, 255, 255),
+        font_size: int = 18
     ) -> Image.Image:
         """
         Create a transparent RGBA image containing the given text.
@@ -58,7 +59,7 @@ class AddWatermark:
             if not (0 <= channel <= 255):
                 raise ValueError("Color channel values must be in range 0–255")
 
-        font = ImageFont.load_default()
+        font = ImageFont.load_default(font_size)
 
         # Measure text
         dummy = Image.new("RGBA", (1, 1))
