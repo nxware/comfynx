@@ -351,6 +351,37 @@ def parse_brackets_with_text(tokens: List[Token], text: str) -> List[Token]:
     return root
 
 
+class ImageDir:
+    def __init__(self, path):
+        self.prompts = {}
+        for path in glob.glob(os.path.join(path, '**/**.png'), recursive=True):
+            self._process_image(path)
+    
+    def _process_image(self, path):
+        prompt = PromptDB.extract_prompt_from_path(path)
+        if prompt in self.prompts:
+            self.prompts[prompt].append(path)
+        else:
+            self.prompts[prompt] = [path]
+
+    def images(self, paths):
+        res = ''
+        for path in paths:
+            res += w.img_from_path(path, 300)
+        return res
+
+    def part_index(self, p: b.Page, params={}):
+        for k in self.prompts.keys():
+            with p.section():
+                id = 'g'+u.guid()
+                p(w.textarea(k, id=id, style='width: 98%; height:150px;'))
+                p.right(w.button_js("Queue", """
+                    const prompt = document.getElementById('"""+id+"""').value;
+                    exec_job_p({"prompt": prompt, "type": "comfyui", "workflow": "/mnt/d/ai/z_image.json", "count": "10", "op": "queue"}, null);
+                """))
+                p.div(self.images(self.prompts[k]))        
+
+
 class PromptDB(r.BaseJobExecutor):
     def __init__(self, path=None, args: u.Args = None):
         super().__init__('promptdb')
@@ -441,20 +472,25 @@ class PromptDB(r.BaseJobExecutor):
             for k in prompt_data.keys():
                 d = prompt_data[k]
                 if d.get('class_type') == 'CLIPTextEncode':
-                    return d.get('inputs', {}).get('text', '')
+                    return str(d.get('inputs', {}).get('text', ''))
             return ''
         except Exception as e:
             print(f"extract_prompt {e}")
+            return ''
+
+    @staticmethod
+    def extract_prompt_from_path(path):
+        from PIL import Image
+        im = Image.open(path)
+        p = PromptDB.extract_prompt(im)
+        return p
 
     def scan_dir(self, path, recursive=False):
         self.info(f"Scan-Dir: {path}")
         i = 0
         for path in glob.glob(os.path.join(path, '**/**.png'), recursive=recursive):
             self.info(f"Processing: {path}")
-            from PIL import Image
-            im = Image.open(path)
-            p = self.extract_prompt(im)
-            self.add_prompt(p)
+            self.add_prompt(self.extract_prompt_from_path(path))
             i += 1
         return i
 
@@ -556,20 +592,31 @@ class PromptDB(r.BaseJobExecutor):
         p.ul( [f'{self.tag_words(k)}: {v}' for k, v in bi_stats.top_n(50).items()])
         p.ul( [f'{self.tag_words(k)}: {v}' for k, v in ti_stats.top_n(50).items()]) # TODO link
 
+    def part_path(self, p: b.Page, params={}):
+        path = self.args['promptdb_path']
+        ip = ImageDir(path)
+        ip.part_index(p, params)
+
     def part_index(self, p: b.Page, params={}):
         p.h1("PromptDB")
-        with p.t('form', action='?') as f:
-            p(w.hidden("type",self.type))
-            p(w.hidden(self.type, "prompt"))
-            p(w.textarea('', name='prompt'))
-            p.input('submit', type='submit',value="Analyse")
-        p(w.hidden("image_data", '', id="image_data"))
-        p.js_ready('nx_initFileDragArea("dropZone", "image_data");')
-        p(w.dropzone(title="Bild hier ablegen"))
-        p(self.action_btn_parametric("Analyse", dict(type= self.type, op= 'image', file_data= '#image_data')))
-        p.ul([
-            w.a("Stats", self.link(self.part_stats))
-        ])
+        with p.section(h="Analyse"):
+            with p.t('form', action='?') as f:
+                p(w.hidden("type",self.type))
+                p(w.hidden(self.type, "prompt"))
+                p(w.textarea('', name='prompt'))
+                p.input('submit', type='submit',value="Analyse")
+            p(w.hidden("image_data", '', id="image_data"))
+            p.js_ready('nx_initFileDragArea("dropZone", "image_data");')
+            p(w.dropzone(title="Bild hier ablegen"))
+            p(self.action_btn_parametric("Analyse", dict(type= self.type, op= 'image', file_data= '#image_data')))
+        with p.section(h="Operations"):
+            p.ul([
+                w.a("Stats", self.link(self.part_stats))
+            ])
+        with p.section(h="Dirs"):
+            p.ul([
+                w.a("Path", self.link(self.part_path))
+            ])
         p.pre('', id="result")
         p.prop("Prompts", len(self.prompts))
 
