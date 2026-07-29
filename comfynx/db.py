@@ -14,7 +14,7 @@ class PersistentIncID:
             "required": {
                 "start_value": (
                     "INT", {
-                        "default": 1, "min": 0,
+                        "default": 1, "min": 0, "max": 99999999,
                         "tooltip": f"Persistenter Zähler wird gespeichert in:\n{COUNTER_FILE}"
                     }
                 )

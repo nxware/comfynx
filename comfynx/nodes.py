@@ -1,6 +1,8 @@
 
 import os
 import io
+import re
+import hashlib
 from PIL import Image,  ImageDraw, ImageFont
 from typing import Optional, Tuple
 
@@ -142,3 +144,25 @@ class AddWatermark:
         img_np = np.array(pil_image).astype(np.float32) / 255.0
         img_tensor = torch.from_numpy(img_np)
         return torch.stack([img_tensor])
+    
+
+class PromptHash:
+    CATEGORY = "utils/primitive"
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+              "prompt": ("STRING", {"default": ""})
+            }
+        }
+    RETURN_TYPES = ("STRING",)
+    FUNCTION = "generate_hash"
+    DESCRIPTION = str(__doc__)
+
+    def hash_buchstaben(self, data: str) -> str:
+        nur_buchstaben = ''.join(re.findall(r'[A-Za-z]', data))
+        return hashlib.sha256(nur_buchstaben.encode('utf-8')).hexdigest()[:8]
+
+    def generate_hash(self, prompt):
+        prompt = str(prompt[0])
+        return (self.hash_buchstaben(prompt[0]),)

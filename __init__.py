@@ -239,7 +239,6 @@ class FileLinePicker:
             return (line, )
 
 
-
 class StringMultilineC:
     """
      MultilineString with Comments #
@@ -394,6 +393,7 @@ WEB_DIRECTORY = './web'
 
 NODE_CLASS_MAPPINGS = {
     "AddWatermark": nodes.AddWatermark,
+    "PromptHash": nodes.PromptHash,
     "SaveJpegImage": SaveJpegImage,
     "SaveImageNx": SaveImageNx,
     "StringMultiConcat": StringMultiConcat,
